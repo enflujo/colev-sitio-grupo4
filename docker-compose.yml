@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  wordpress:
+    container_name: colev-grupo4-wordpress
+    image: wordpress
+    restart: unless-stopped
+    ports:
+      - ${WP_PUERTO}:80
+    networks:
+      - red-grupo4
+    environment:
+      WORDPRESS_DB_HOST: bd
+      WORDPRESS_DB_USER: ${WP_USUARIO_BD}
+      WORDPRESS_DB_PASSWORD: ${WP_CLAVE_BD}
+      WORDPRESS_DB_NAME: ${WP_NOMBRE_BD}
+    volumes:
+      - ./wordpress:/var/www/html
+
+  bd:
+    container_name: colev-grupo4-bd
+    image: mysql:5.7
+    restart: unless-stopped
+    networks:
+      - red-grupo4
+    environment:
+      MYSQL_DATABASE: ${WP_NOMBRE_BD}
+      MYSQL_USER: ${WP_USUARIO_BD}
+      MYSQL_PASSWORD: ${WP_CLAVE_BD}
+      MYSQL_ROOT_PASSWORD: ${BD_CLAVE}
+    volumes:
+      - ./basededatos:/var/lib/mysql
+
+networks:
+  red-grupo4:
